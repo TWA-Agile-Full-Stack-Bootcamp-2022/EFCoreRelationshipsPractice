@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using EFCoreRelationshipsPractice.Dtos;
 
 namespace EFCoreRelationshipsPractice.Models
 {
@@ -7,6 +9,13 @@ namespace EFCoreRelationshipsPractice.Models
     {
         public Company()
         {
+        }
+
+        public Company(CompanyDto companyDto)
+        {
+            Name = companyDto.Name;
+            Profile = new Profile(companyDto.Profile);
+            Employees = companyDto.Employees.Select(dto => new Employee(dto)).ToList();
         }
 
         [Key]
