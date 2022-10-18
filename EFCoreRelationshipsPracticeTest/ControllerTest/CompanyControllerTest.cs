@@ -8,15 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using EFCoreRelationshipsPractice;
 using EFCoreRelationshipsPractice.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace EFCoreRelationshipsPracticeTest
 {
-    public class CompanyControllerTest : TestBase
+    public class CompanyControllerTest : TestBase, IDisposable
     {
         public CompanyControllerTest(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
+        }
+
+        public void Dispose()
+        {
+            var client = GetClient();
+            client.DeleteAsync("/companies");
         }
 
         [Fact]
@@ -123,6 +130,12 @@ namespace EFCoreRelationshipsPracticeTest
             var returnCompanies = JsonConvert.DeserializeObject<List<CompanyDto>>(body);
 
             Assert.Equal(2, returnCompanies.Count);
+        }
+
+        private void ClearDbData()
+        {
+            var client = GetClient();
+            client.DeleteAsync("/companies");
         }
     }
 }

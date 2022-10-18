@@ -49,5 +49,12 @@ namespace EFCoreRelationshipsPractice.Controllers
 
             return this.NoContent();
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAll()
+        {
+            await companyService.DeleteAllCompanies();
+            return this.NoContent();
+        }
     }
 }

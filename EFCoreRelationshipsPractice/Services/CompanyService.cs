@@ -51,5 +51,13 @@ namespace EFCoreRelationshipsPractice.Services
                 await companyDbContext.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteAllCompanies()
+        {
+            var allCompanies = companyDbContext.Companies.Include(company => company.Profile)
+                .Include(company => company.Employees);
+            companyDbContext.Companies.RemoveRange(allCompanies);
+            await companyDbContext.SaveChangesAsync();
+        }
     }
 }
