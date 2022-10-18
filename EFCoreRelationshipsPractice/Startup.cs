@@ -52,8 +52,10 @@ namespace EFCoreRelationshipsPractice
             {
                 using (var context = scope.ServiceProvider.GetService<CompanyDbContext>())
                 {
-                    context.Database.EnsureDeleted();
-                    context.Database.EnsureCreated();
+                    if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                    {
+                        context.Database.Migrate();
+                    }
                 }
             }
 
@@ -61,20 +63,14 @@ namespace EFCoreRelationshipsPractice
             app.UseSwagger();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
